@@ -18,6 +18,7 @@ def image_of_the_day_command(message):
 
         # Находим div с классом "fake-heading h2 main-header" и текстом "Изображение дня"
         div_tag = soup.find('div', class_="fake-heading h2 main-header", string="Изображение дня")
+        photo_description = soup.find("div", class_="main-box-imageCaption")
 
         if div_tag:
             # Ищем первое изображение внутри найденного div
@@ -29,6 +30,8 @@ def image_of_the_day_command(message):
 
                 # Отправляем изображение пользователю
                 bot.send_photo(message.chat.id, img_url)
+                # Отправляем описание изображения пользователю
+                bot.send_message(message.chat.id, photo_description.text)
             else:
                 bot.send_message(message.chat.id, "Изображение не найдено в данном разделе.")
         else:
