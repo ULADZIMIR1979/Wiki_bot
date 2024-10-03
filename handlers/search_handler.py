@@ -11,6 +11,11 @@ def search_command(bot, message):
 def process_query_input(bot, message):
     user_id = message.from_user.id
     query = message.text
+    if not query:
+        bot.send_message(message.chat.id, "Я могу обрабатывать только текстовые запросы.\n"
+                                          "Пожалуйста, нажмите на кнопку <b>Search</b> и введите слово для поиска.",
+                         parse_mode="html")
+        return
 
     # Сохраняем запрос в базе данных.
     UserRequest.create(user_id=user_id, query=query)
@@ -28,6 +33,7 @@ def process_query_input(bot, message):
             for i in range(0, len(response_text), max_length):
                 bot.send_message(message.chat.id, response_text[i:i + max_length])
         else:
-            bot.send_message(message.chat.id, response_text)
+            bot.send_message(message.chat.id, response_text, parse_mode="HTML")
+
     else:
         bot.send_message(message.chat.id, result_message)
